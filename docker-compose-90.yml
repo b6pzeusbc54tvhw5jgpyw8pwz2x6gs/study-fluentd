@@ -1,0 +1,49 @@
+version: '2.1'
+services:
+  web:
+    image: httpd
+    ports:
+      - "80:80"
+    networks:
+      - efk
+    logging:
+      driver: "fluentd"
+      options:
+        tag: httpd.access
+        fluentd-address: localhost:24224
+
+  fluentd:
+    build: .
+    user: root
+    volumes:
+      - ./:/fluentd/etc
+    networks:
+      - efk
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    command:
+      - -v
+      - -c
+      - /fluentd/etc/fluentd-090-geoip.conf
+
+  elasticsearch:
+    image: elasticsearch:5.3.0
+    networks:
+      - efk
+    expose:
+      - 9200
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: kibana:5.3.0
+    networks:
+      - efk
+    ports:
+      - "5601:5601"
+
+networks:
+  efk:
+    driver: bridge
+
