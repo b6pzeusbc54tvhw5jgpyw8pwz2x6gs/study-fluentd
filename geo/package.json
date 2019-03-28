@@ -1,0 +1,10 @@
+{
+  "name": "geo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "fluent-logger": "^3.3.1",
+    "line-by-line": "^0.1.6"
+  }
+}
